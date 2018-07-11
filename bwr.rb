@@ -11,12 +11,8 @@ class Main
 				puts(cmd[4..cmd.length - 1])
 			elsif cmd[0..4] == "touch" && cmd.length > 6
 				self.touch(cmd[6..cmd.length - 1])
-			elsif cmd[0..1] == "ls"
-				if cmd.length > 2
-					self.ls(cmd[3..cmd.length - 1])
-				else
-					self.ls()
-				end
+			elsif cmd[0..1] == "ls" || cmd[0..2] == "dir"
+				self.ls()
 			elsif cmd == "exit"
 				break
 			else
@@ -24,9 +20,14 @@ class Main
 			end
 		end
 	end
-	def ls(dir="")
-		Dir.glob("#{dir}\*").each do |d|
-			puts(d)
+	def ls()
+		Dir.glob("*") do |f|
+			type = case 
+			when File.file?(f) then "(FILE)"
+			when File.directory?(f) then "(DIR)"
+			else "?"
+			end
+		puts("#{type} #{f}")
 		end
 	end
 	def cd(dir)
